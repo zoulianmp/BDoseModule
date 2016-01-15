@@ -1,0 +1,24 @@
+
+SUBDIR = libbrachy phys_dat brachy brachy_dose
+
+all:
+	for %%i in ($(SUBDIR)) do \
+		echo making %%i... & \
+		cd %%i & \
+		make & \
+	cd ..
+
+install:
+	for %%i in ($(SUBDIR)) do \
+		echo installing %%i... & \
+		cd %%i & \
+		make install & \
+	cd ..
+
+clean: 
+	for %%i in ($(SUBDIR)) do \
+		echo cleaning %%i... & \
+		cd %%i & \
+		make clean & \
+	cd ..
+

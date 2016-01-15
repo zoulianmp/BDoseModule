@@ -1,0 +1,60 @@
+
+#
+#  BINARY is the name of the thing we are trying to build
+#
+BINARY = brachy.exe
+#
+#  MAKEFILE is the name of this Makefile - I like makefile, others
+#  like Makefile.
+#
+MAKEFILE = Makefile
+#
+#  CXXFLAGS are options to the c compiler
+#
+CXXFLAGS = $(HFLAGS) -I$(UP)/src/include -DWIN32
+
+#
+#  SRCS is a list of .c files for use by 'make depend'
+#
+SRCS =	main.cxx \
+	init.cxx \
+	make_windows.cxx \
+	mirror_cb.cxx \
+	options_cb.cxx \
+	output.cxx \
+	read_image.cxx \
+	rotate_cb.cxx \
+	sample_image.cxx\
+	seed_source_select.cxx \
+	set_grid_cb.cxx \
+	set_grid_plane_cb.cxx \
+	spread_sheet.cxx \
+	window.cxx
+
+OBJS = $(SRCS:.cxx=.obj)
+
+#  LIBS is a list of libraries to be handed to ld (in -lfoo form)
+#
+LIBS = \
+	$(UP)/lib/libbrachy.lib \
+	$(UP)/lib/libplanX.lib \
+	$(UP)/lib/libplan.lib \
+	$(UP)/lib/libplanio.lib \
+	$(UP)/lib/libps.lib \
+	$(UP)/lib/lib3d.lib \
+	$(UP)/lib/libfltk.lib \
+	$(LMISC)
+
+$(BINARY): $(OBJS)
+        $(CC) -o $(BINARY) $(CXXFLAGS) $(OBJS) $(LIBS)
+
+install: $(BINARY)
+    copy $(BINARY) $(UP)\bin\.
+    del $(BINARY)
+
+clean:
+    -del $(BINARY)
+    -del *.obj
+
+# DO NOT DELETE THIS LINE - make depend depends on it
+ 

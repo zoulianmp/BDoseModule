@@ -1,0 +1,48 @@
+
+#
+#  BINARY is the name of the thing we are trying to build
+#
+BINARY = brachy_dose.exe
+#
+#  MAKEFILE is the name of this Makefile - I like makefile, others
+#  like Makefile.
+#
+MAKEFILE = Makefile
+#
+#  CXXFLAGS are options to the c compiler
+#
+CXXFLAGS = $(HFLAGS) -I$(UP)/src/include -DWIN32
+
+#
+#  SRCS is a list of .c files for use by 'make depend'
+#
+SRCS =	brachy_dose.cxx \
+	calc_norm_mat.cxx \
+	calc_norm_vec.cxx \
+	output.cxx \
+	setup.cxx
+
+OBJS = $(SRCS:.cxx=.obj)
+
+#  LIBS is a list of libraries to be handed to ld (in -lfoo form)
+#
+LIBS = \
+	$(UP)/lib/libbrachy.lib \
+	$(UP)/lib/libplan.lib \
+	$(UP)/lib/libplanio.lib \
+	$(UP)/lib/lib3d.lib \
+	$(LMISC)
+
+$(BINARY): $(OBJS)
+        $(CC) -o $(BINARY) $(CXXFLAGS) $(OBJS) $(LIBS)
+
+install: $(BINARY)
+    copy $(BINARY) $(UP)\bin\.
+    del $(BINARY)
+
+clean:
+    -del $(BINARY)
+    -del *.obj
+
+# DO NOT DELETE THIS LINE - make depend depends on it
+ 
