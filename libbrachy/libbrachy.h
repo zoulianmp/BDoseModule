@@ -24,6 +24,21 @@
 #define MG 1
 #define MC 2
 
+
+
+#ifndef TRUE
+#define TRUE (1)
+#endif
+#ifndef FALSE
+#define FALSE (0)
+#endif
+#ifndef PI
+#define PI (3.141592654)
+#endif
+
+
+
+
 /*
   defines for lookup tables
 */
@@ -57,39 +72,13 @@ typedef struct
     float seed_dose_table[SEED_RADII];
 } SEED_SPEC;
 
-typedef struct
-{
-    char isotope[50];
-    float gamma;	/*  R per (MG or MC) per hour at 1 cm  */
-    int gammaUnits;	/*  MG or MC  */
-    float R_to_r;	/*  rad/Roentgen factor  */
-    float half_life;	/*  in hours  */
-    float phys_length;	/*  physical length of source  */
-    float act_length;	/*  active length of source - assumed to be
-			    centered in physical length  */
-    float wall;		/*  thickness of capsule wall  */
-    float wall_mu;	/*  attenuation coeff. of capsule material  */
-    float diameter;	/*  outside diameter of capsule  */
-    float TA_fit[4];	/*  tissue attenuation fit ala Meisberger -
-			  	constant term first  */
-    float mu;		/*  linear tissue attenuation coefficient - used past
-				10 cm  */
-    int last_entry;	/*  boolean  */
 
-                        /*  The next three data are for a precalculated
-			    table of values on a polar grid.  This should
-			    result in some plan-time cycle savings
-			    */
-    float polar_radii[POLAR_RADII];
-    float polar_angles[POLAR_ANGLES];
-    float polar_table[POLAR_ANGLES][POLAR_RADII];
-} SOURCE_SPEC;
-
-typedef struct
+typedef struct 
 {
-    int type;
-    PNT3D p[2];		/*  entered coordinates in cm  */
-} SOURCE;
+	float x; //!< x-coordinate of the 3D-point in cm.
+	float y; //!< y-coordinate of the 3D-point in cm.
+	float z; //!< z-coordinate of the 3D-point in cm.
+} PNT3D;
 
 typedef struct
 {
@@ -112,45 +101,34 @@ typedef struct
     BRACHY_OBJECT *object;
 } BRACHY_OBJECTS;
 
-typedef struct
-{
-    int		source_count;
-    int		seed_count;
-    SOURCE	*source;
-    SEED	*seed;
-} IMPLANT_DESC;
-
 
 /* Prototypes */
-float
-Sievert(float cos_theta,
-        float thick,
-	float b,
-	float fit_a,
-	float fit_b,
-	float fit_c,
-	float fit_d,
-	float TA_mu,
-	float TA_at_10,
-	int debug);
+
 
 int read_seeds(int *num_seeds, SEED_SPEC **seed_list);
 float seed_pdose(SEED_SPEC *seed_spec, int exact, float x, float y, float z);
-int read_sources(int *num_sources, SOURCE_SPEC **source_list);
+
+
 
 float
-source_pdose(
-	SOURCE_SPEC *source_spec,
-	int exact,
-	float x_axis,
-	float y_axis,
-	float z_axis,
-	float r_axis,  
-	float x_pt, 
-	float y_pt, 
-	float z_pt);
+v_interp(
+	int         mode,
+	int         vec_size,
+	float       xvec[],
+	float       x,
+	float       yvec[],
+	int         *index,
+	float       *fx);
+	
+	
 
-int source_select(int *act_units, char *title_text);
+char *
+get_phys_dat_dir();
+	
+	
+	
+	
+	
 
 #endif
 

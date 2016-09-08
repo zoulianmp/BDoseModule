@@ -1,12 +1,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include "plan_file_io.h"
+
+
+#include <io.h>
+#include <fcntl.h>
+
 #include <sys/types.h>
 #include <sys/stat.h>
-#include "gen.h"
-#include "libplanio.h"
+
 #include "libbrachy.h"
 
 int
@@ -39,13 +41,18 @@ read_seeds(int *num_seed_list, SEED_SPEC **seed_list)
 	fprintf(stderr, "seed_get_specs: malloc failed\n");
 	return(1);
     }
+	int ss = sizeof(SEED_SPEC);
 
-    for (loop = 0; loop < num; loop++) {
-	ret = read(fdes, (char *)&seeds[loop], sizeof(SEED_SPEC));
-	if (ret != sizeof(SEED_SPEC)) {
-	    fprintf(stderr, "seed_get_specs: error reading seed_dat\n");
-	    return(1);
-	}
+    for (loop = 0; loop < num; loop++) 
+	{
+		//ret = read(fdes, (char *)&seeds[loop], sizeof(SEED_SPEC));
+		ret = read(fdes, &seeds[loop], sizeof(SEED_SPEC));
+
+		if (ret != sizeof(SEED_SPEC))
+		{  
+			fprintf(stderr, "seed_get_specs: error reading seed_dat\n"); 
+			return(1);
+		}
     }
     close(fdes);
 

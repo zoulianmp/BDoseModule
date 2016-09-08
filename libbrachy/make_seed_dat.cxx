@@ -1,14 +1,15 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include "plan_file_io.h"
-#include "gen.h"
-#include "libplan.h"
-#include "libplanio.h"
+
+#include <math.h>
 #include "libbrachy.h"
 
+#include <io.h>
+#include <fcntl.h>
+
 char target[100];
+
 
 int
 main(int argc, char **argv)
@@ -169,22 +170,26 @@ sspec[record].seed_dose_table[loop]);
 	    }
 	}
 
+	
+
 	sprintf(target, "%s/%s", get_phys_dat_dir(), "seed_dat");
 
 	if ((fdes = open(target, O_WRONLY | O_CREAT | O_TRUNC, 0664)) < 0) {
-	    fprintf(stderr, "make_seed_dat: could not create file %s", target);
-	    exit(1);
+		fprintf(stderr, "make_seed_dat: could not create file %s", target);
+		exit(1);
 	}
+
+	int ss = sizeof(SEED_SPEC);
 
 	for (record = 0; record < sizeof(sspec) /
 		sizeof(SEED_SPEC); record++)
 	{
-	    if(write(fdes, &sspec[record], sizeof(sspec[record])) !=
-		    sizeof(sspec[record]))
-	    {
-		fprintf(stderr, "make_seed_dat: write fail\n");
-		exit(1);
-	    }
+		if (write(fdes, &sspec[record], sizeof(sspec[record])) !=
+			sizeof(sspec[record]))
+		{
+			fprintf(stderr, "make_seed_dat: write fail\n");
+			exit(1);
+		}
 	}
 
 	close(fdes);

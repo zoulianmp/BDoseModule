@@ -3,8 +3,8 @@
 
 #include <stdio.h>
 #include <math.h>
-#include "gen.h"
-#include "libplan.h"
+
+
 #include "libbrachy.h"
 
 /*
@@ -33,7 +33,8 @@ seed_pdose(SEED_SPEC *seed_spec, int exact, float x, float y, float z)
 	dist_square = .00001;
     dist = sqrt(dist_square);
     seed_table_index = (int) (dist*100.0);
-    if (exact || (seed_table_index >= SEED_RADII)) {
+    if (exact || (seed_table_index >= SEED_RADII)) 
+	{
 	if (seed_spec->TA_count < 2 ||
 	    dist > seed_spec->TA_distance[seed_spec->TA_count - 1])
 	    atten = exp(seed_spec->mu*dist);

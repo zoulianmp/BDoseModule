@@ -5,16 +5,18 @@
 cmake_minimum_required(VERSION 2.6)
 
 
+include_directories(AFTER ${CMAKE_SOURCE_DIR}/libbrachy)
 
+add_definitions(-DPHYS_DAT_DIR)
+
+
+
+message("(${CMAKE_SOURCE_DIR}/libbrachy)")
 #------------------------------------------------------------------------------
 # Add the source subdirectory - all the source code for the libraries is under
 # this.
 #
 
-add_executable(make_ls_dat  make_ls_dat.cxx)
+add_executable(testRun  main.cxx)
 
-target_link_libraries(make_ls_dat brachy plan planio 3d z m)
-
-
-add_executable(make_seed_dat make_seed_dat.cxx)
-target_link_libraries(make_seed_dat brachy plan planio 3d z m)
+target_link_libraries(testRun  libbrachy)
