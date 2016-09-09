@@ -1,0 +1,38 @@
+
+CPPFILES = \
+	Sievert.cxx \
+	read_sources.cxx \
+	read_seeds.cxx \
+	seed_pdose.cxx \
+	source_pdose.cxx
+
+OBJECTS = $(CPPFILES:.cxx=.obj)
+
+CXXFLAGS = $(HFLAGS) -I$(UP)/src/include -DWIN32
+
+LIBRARY = libbrachy.lib
+LIBDIR = ../lib/
+
+all:	$(LIBRARY)
+
+$(LIBRARY): $(OBJECTS)
+    lib $(OBJECTS) /out:$(LIBRARY)
+
+.SUFFIXES:	.cxx .h .obj
+
+.cxx.o :
+	$(CXX) -I. $(CXXFLAGS) -c $<
+.c.o :
+	$(CC) -I. $(CFLAGS) -c -o $@ $<
+
+clean :
+	-del *.obj
+	-del $(LIBRARY)
+
+################################################################
+
+install: $(LIBRARY)
+	@echo "Installing library..."
+	copy $(LIBRARY) $(UP)\lib\.
+    copy libbrachy.h $(UP)\src\include\.
+

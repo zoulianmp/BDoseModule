@@ -3,6 +3,7 @@
 
 #include "vtkSRPlanPathPlanModuleLogicExport.h"
 
+#include "libbrachy.h"
 
 #include "vtkObject.h"
 #include "vtkSmartPointer.h"
@@ -15,7 +16,7 @@ public:
   vtkTypeMacro(vtkIr192SeedSource,vtkObject);
   void PrintSelf(ostream& os, vtkIndent indent);
 
-  
+  static void SetupIr192Seed();
 
   ///
   /// The type of task - this can be used, for example, to decide
@@ -40,6 +41,8 @@ protected:
 private:
   
   int Type;
+
+  static SEED_SPEC Ir192Spec;
 
 };
 #endif

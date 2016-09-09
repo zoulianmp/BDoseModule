@@ -102,72 +102,72 @@ main(int argc, char **argv)
 	for (record = 0; record < sizeof(sspec) /
 		sizeof(SEED_SPEC); record++)
 	{
-		if (record == 1 || record == 2)	/* the iridiums */
+	    if (record == 1 || record == 2)	/* the iridiums */
+	    {
+		for (loop = 0; loop < sspec[record].TA_count; loop++)
 		{
-			for (loop = 0; loop < sspec[record].TA_count; loop++)
-			{
-				sspec[record].tissue_attenuation[loop] =
-					POLY(sspec[record].TA_distance[loop],
-						1.0128, 0.00519, -0.001178, -0.00002008);
+		    sspec[record].tissue_attenuation[loop] =
+				POLY(sspec[record].TA_distance[loop],
+				1.0128, 0.00519, -0.001178, -0.00002008);
 
-				printf("TA(%f) = %f\n", sspec[record].TA_distance[loop],
-					sspec[record].tissue_attenuation[loop]);
-			}
+		    printf("TA(%f) = %f\n", sspec[record].TA_distance[loop],
+				sspec[record].tissue_attenuation[loop]);
 		}
+	    }
 
-		sumxy = 0.0;
-		sumx2 = 0.0;
-		sumx = 0.0;
-		sumy = 0.0;
-		n = 0;
-		for (loop = sspec[record].TA_count - 1;
-		loop > sspec[record].TA_count - 7 && loop > 0; loop--)
-		{
-			x = sspec[record].TA_distance[loop];
-			y = log((double)sspec[record].tissue_attenuation[loop]);
-			sumxy += x * y;
-			sumx2 += x * x;
-			sumx += x;
-			sumy += y;
-			n++;
-		}
-		sspec[record].mu = (sumxy - sumx * sumy / n) /
+	    sumxy = 0.0;
+	    sumx2 = 0.0;
+	    sumx = 0.0;
+	    sumy = 0.0;
+	    n = 0;
+	    for (loop = sspec[record].TA_count - 1;
+		 loop > sspec[record].TA_count - 7 && loop > 0; loop--)
+	    {
+		x = sspec[record].TA_distance[loop];
+		y = log((double) sspec[record].tissue_attenuation[loop]);
+		sumxy += x * y;
+		sumx2 += x * x;
+		sumx += x;
+		sumy += y;
+		n++;
+	    }
+	    sspec[record].mu = (sumxy - sumx * sumy / n) /
 			(sumx2 - sumx * sumx / n);
 
-		/*
-		printf("mu for %s is %f\n", sspec[record].isotope,
+	    /*
+	    printf("mu for %s is %f\n", sspec[record].isotope,
 		   sspec[record].mu);
-		*/
+	    */
 
-		/*
-		  The following code (which is liberally borrowed from seed_pdose)
-		  calculates the dose_table on a millimeter vector.
-		  */
-		printf("    dist,   gamma,   R_to_r,  atten,   dist_sq:   dose\n");
-		for (loop = 0; loop < SEED_RADII; loop++)
-		{
-			dist = ((float)loop) / 100.0;
-			dist_square = dist * dist;
-			if (dist_square < .00001)
-				dist_square = .00001;
+/*
+  The following code (which is liberally borrowed from seed_pdose)
+  calculates the dose_table on a millimeter vector.
+  */
+printf("    dist,   gamma,   R_to_r,  atten,   dist_sq:   dose\n");
+	    for (loop = 0; loop < SEED_RADII; loop++)
+	    {
+		dist = ((float) loop) / 100.0;
+		dist_square = dist * dist;
+		if (dist_square < .00001)
+		    dist_square = .00001;
 
-			if (sspec[record].TA_count < 2 ||
-				dist > sspec[record].TA_distance[sspec[record].TA_count - 1])
-				atten = (float)exp((double)(sspec[record].mu * dist));
-			else
-				atten = v_interp(0, sspec[record].TA_count,
-					sspec[record].TA_distance,
-					dist,
-					sspec[record].tissue_attenuation,
-					&index, &fx);
+		if (sspec[record].TA_count < 2 ||
+		    dist > sspec[record].TA_distance[sspec[record].TA_count - 1])
+		    atten = (float) exp((double) (sspec[record].mu * dist));
+		else
+		    atten = v_interp(0, sspec[record].TA_count,
+				     sspec[record].TA_distance,
+				     dist,
+				     sspec[record].tissue_attenuation,
+				     &index, &fx);
 
-			sspec[record].seed_dose_table[loop] = sspec[record].gamma *
-				sspec[record].R_to_r * atten / dist_square;
-			if (loop % 100 == 0)
-				printf("dose[%.2f]: %f %f %f %f: %f\n",
-					dist, sspec[record].gamma, sspec[record].R_to_r, atten, dist_square,
-					sspec[record].seed_dose_table[loop]);
-		}
+		sspec[record].seed_dose_table[loop] = sspec[record].gamma *
+		    sspec[record].R_to_r * atten / dist_square;
+if (loop % 100 == 0)
+printf("dose[%.2f]: %f %f %f %f: %f\n",
+dist, sspec[record].gamma, sspec[record].R_to_r, atten, dist_square,
+sspec[record].seed_dose_table[loop]);
+	    }
 	}
 
 	

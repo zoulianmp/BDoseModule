@@ -4,8 +4,16 @@
 #include <vtkImageData.h>
 #include <vtkImageIterator.h>
 
+#include <vtkIr192SeedSource.h>
+
+
 int main(int, char *[])
 {
+	vtkIr192SeedSource *s = vtkIr192SeedSource::New();
+
+
+
+
   // Create an image data
   vtkSmartPointer<vtkImageData> imageData =
       vtkSmartPointer<vtkImageData>::New();
