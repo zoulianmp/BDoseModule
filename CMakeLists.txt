@@ -13,7 +13,7 @@ cmake_minimum_required(VERSION 2.6)
 
 add_subdirectory( libbrachy)
 add_subdirectory( testRun )
-#add_subdirectory(brachy_dose)
+add_subdirectory(ImageIterator)
 
 
 
